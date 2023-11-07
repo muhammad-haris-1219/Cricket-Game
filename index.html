@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cricket Task</title>
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"> -->
+    <style>
+        .container {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid gray;
+            display: grid;
+            grid-gap: 2%;
+            background: #fafff6;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto 1fr;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        #speech {
+            width: 100%;
+            height: auto;
+            color: white;
+            text-align: center;
+            text-transform: capitalize;
+            grid-column: 1/3;
+            background: #0d7bcf;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 0% 0% 20% 20% / 0% 0% 10% 10%;
+        }
+
+        #commentary {
+            width: 100%;
+        }
+
+        #btn {
+            background: url(./cricket.png) no-repeat center;
+            width: 50px;
+            margin-right: 2%;
+            height: 50px;
+            border-radius: 60% 40% 60% 40% / 98% 2% 98% 2%;
+            border: none;
+            outline: none;
+        }
+
+        #btn:active {
+
+            border: 1px solid #66b9f8;
+        }
+
+        .team {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+
+        .team span:nth-child(2) {
+            background: whitesmoke;
+            border-radius: 5%;
+            overflow: auto;
+            padding: 1%;
+            height: 85%;
+            width: 95%;
+            text-align: center;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        }
+
+        #team_one,
+        #team_two {
+            font-weight: bolder;
+            font-size: 30px;
+            overflow: auto;
+            text-align: center;
+            padding: 1%;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        #result {
+            width: auto;
+            grid-column: 1/3;
+            height: auto;
+            text-align: center;
+            font-size: 25px;
+            box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+        }
+
+        #status {
+            width: 90%;
+            text-transform: capitalize;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+        }
+
+        li {
+            overflow: auto;
+            width: 100%;
+        }
+
+        @media all and (max-width:767px) {
+
+            #team_one,
+            #team_two {
+                font-size: 20px;
+                height: 30px;
+            }
+            
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="speech">
+            <h1 id="status">let's game started!</h1>
+            <button id="btn" onclick="gameToss()"></button>
+        </div>
+        <!-- Team_one -->
+        <div id="bat_one" class="team">
+            <span id="team_one">1st Inning</span>
+            <span class="detail">
+                <ul id="first_ball">
+                    <li><img src="./ball.png" alt="ball"></li>
+                    <li>BALL</li>
+
+                </ul>
+                <ul id="first_runs">
+                    <li><img src="./bat.png" alt="bat"></li>
+                    <li>RUNS</li>
+                </ul>
+                <ul id="first_wicket">
+                    <li><img src="./wicket.png" alt="wicket"></li>
+                    <li>OUTS</li>
+                </ul>
+            </span>
+        </div>
+
+
+        <!-- Team_two -->
+        <div id="bat_two" class="team">
+            <span id="team_two">2nd Inning</span>
+            <span class="detail">
+                <ul id="second_ball">
+                    <li><img src="./ball.png" alt="ball"></li>
+                    <li>BALL</li>
+                </ul>
+                <ul id="second_runs">
+                    <li><img src="./bat.png" alt="bat"></li>
+                    <li>RUNS</li>
+                </ul>
+                <ul id="second_wicket">
+                    <li><img src="./wicket.png" alt="wicket"></li>
+                    <li>OUTS</li>
+                </ul>
+
+            </span>
+        </div>
+
+
+        <div id="result">
+            <h3 id="summary">Match Summary</h3>
+        </div>
+
+    </div>
+
+
+
+
+    <script>
+
+
+
+
+
+        // function pause(delay) {
+        //     var time1 = Date.now();
+        //     var time2 = null;
+        //     do {
+        //         time2 = Date.now();
+        //     }
+        //     while (time2 - time1 < delay);
+        // }  
+
+        var firstBall = document.getElementById('first_ball');
+        var secondBall = document.getElementById('second_ball');
+        var firstRuns = document.getElementById('first_runs');
+        var secondRuns = document.getElementById('second_runs');
+        var firstWicket = document.getElementById('first_wicket');
+        var secondWicket = document.getElementById('second_wicket');
+        var teamOne = document.getElementById('team_one');
+        var teamTwo = document.getElementById('team_two');
+        var summary = document.getElementById('summary');
+        var btn = document.getElementById('btn');
+
+        var teamDecision;
+        var randomizedTeam;
+        var selectedTeam;
+        var team;
+        var teams = ['pak', 'ind', 'aus', 'ban', 'sri', 'wi', 'eng', 'sa', 'nz', 'other Team'];
+
+
+        function gameToss() {
+
+            btn.style.display = 'none';
+            team = prompt('Type Your Team Name');
+
+            for (var m = 0; m < teams.length; m++) {
+                randomizedTeam = Math.round(Math.random() * (teams.length - 1));
+            }
+
+            if (team.slice(0, 3) == teams[randomizedTeam]) {
+                selectedTeam = teams[randomizedTeam + 1];
+            }
+            else {
+                selectedTeam = teams[randomizedTeam];
+            }
+            console.log(selectedTeam, team);
+
+            var toss = Math.round(Math.random());
+            var tossing = prompt('Type Head or Tail');
+            switch (true) {
+                case (toss == 0 && tossing == 'tail' || toss == 0 && tossing == 'head'):
+                    teamDecision = prompt(`${team} choose Batting or Bowling`).toLowerCase();
+                    console.log(toss, '***', teamDecision);
+                    break;
+                case tossing == '' || team == '':
+                    window.location.reload(true);
+                    break;
+                default: console.log('**', toss);
+            }
+
+
+            if (teamDecision == 'bowling') {
+                console.log(teams[randomizedTeam]);
+                var pcTarget = playGame(teams[randomizedTeam]);
+                playGame(team, pcTarget);
+                console.log(pcTarget, 'targeting')
+
+                teamOne.innerText = teams[randomizedTeam].toUpperCase();
+                teamTwo.innerText = team.toUpperCase() + ' ' + teamDecision;
+                // console.log(teamDecision)
+            }
+            else if (teamDecision == 'batting') {
+                console.log(team);
+                var userTarget = playGame(team);
+                playGame(teams[randomizedTeam], userTarget);
+
+                teamOne.innerText = team.toUpperCase() + ' ' + teamDecision;
+                teamTwo.innerText = teams[randomizedTeam].toUpperCase();
+                // console.log(teamDecision)
+            }
+            else if (teamDecision == '') {
+                window.location.reload(true);
+
+            }
+            else {
+                console.log(teams[randomizedTeam]);
+                var pcTarget = playGame(teams[randomizedTeam]);
+                playGame(team, pcTarget);
+                console.log(pcTarget, 'targeting')
+
+                teamOne.innerText = teams[randomizedTeam].toUpperCase();
+                teamTwo.innerText = team.toUpperCase() + ' Fielding';
+                // console.log(teamDecision)
+            }
+
+
+
+        }
+
+        var i;
+        var j;
+        function playGame(elected, targeted) {
+            var teamScoring = 0;
+            var teamWickets = 0;
+
+            outerloop: for (i = 0; i < 5; i++) {
+
+                console.log('****', i + 1, '****');
+
+                innerloop: for (j = 1; j <= 6; j++) {
+
+
+                    var runs = Math.floor(Math.random() * 6);
+                    if (teamWickets < 5) {
+                        if (runs == 0) {
+                            teamWickets++
+                        }
+                        teamScoring += runs;
+
+                        if (!targeted) {
+                            // 1st Team Balling
+                            var balls = document.createElement('li');
+                            balls.textContent = `${i}.${j}`;
+                            firstBall.appendChild(balls);
+                            // 1st Team Runs
+                            var runing = document.createElement('li');
+                            runing.textContent = runs;
+                            if (j == 6) {
+                                balls.style.fontWeight = 'bold'
+                                runing.textContent = runs + ' ' + teamScoring;
+                            }
+                            firstRuns.appendChild(runing);
+                            // 1st Team Wickets
+                            var outning = document.createElement('li');
+                            outning.textContent = `${(teamWickets)} / 5`;
+                            firstWicket.appendChild(outning);
+                        }
+
+                        else {
+
+                            // 2nd Team Balling
+                            var balls = document.createElement('li');
+                            balls.textContent = `${i}.${j}`;
+                            secondBall.appendChild(balls);
+                            // 2nd Team Runs
+                            var runing = document.createElement('li');
+                            runing.textContent = runs;
+                            if (j == 6) {
+                                balls.style.fontWeight = 'bold'
+                                runing.textContent = runs + ' ' + teamScoring;
+                            }
+                            secondRuns.appendChild(runing);
+                            // 2nd Team Wickets
+                            var outning = document.createElement('li');
+                            outning.textContent = `${(teamWickets)} / 5`;
+                            secondWicket.appendChild(outning);
+                            if (teamScoring > targeted) {
+                                // targeted + '**Winning**' + teamScoring;
+                                summary.innerText = `**{Hurry! WINNING}** by ${5 - teamWickets} wickets The Gave Target ${targeted + 1} & The Chased ${teamScoring} `
+                                console.log(elected, `${i}.${j}`, runs, teamWickets, teamScoring);
+                                console.log(targeted + 1, '**Winning**', teamScoring)
+                                btn.style.display = 'block';
+                                break outerloop;
+                                return
+                            }
+                        }
+
+                        console.log(elected, `${i}.${j}`, runs, teamWickets, teamScoring);
+                    }
+                    else if (targeted == teamScoring) {
+                        console.log(targeted, '** TIED **', teamScoring);
+                        summary.innerText = `**{OH! TIED}** The Given Target ${targeted + 1} & The Played ${teamScoring} `
+                        btn.style.display = 'block';
+                        break outerloop;
+                    }
+                    else {
+                        console.log('*** sub ', teamWickets, ' khtm***')
+                        summary.innerText = `**{AH! LOSER}**! ${teamWickets} wickets ,The Given Target ${targeted + 1} & The Scored ${teamScoring} `
+                        btn.style.display = 'block';
+                        break outerloop;
+                    }
+
+                }
+            }
+
+
+            if (targeted > teamScoring) {
+                console.log(targeted, '* LOSE *', teamScoring);
+                summary.innerText = summary.innerText = `**{AH! LOSER}**!, The Given Target ${targeted + 1} & The Scored ${teamScoring} `
+                btn.style.display = 'block';
+            }
+
+
+            // else {
+            //     console.log(targeted, '* checking *', teamScoring)
+            //     summary.innerText=targeted+ '* checking  *'+ teamScoring;
+            // }
+            return teamScoring;
+        }
+
+
+
+
+
+    </script>
+</body>
+
+</html>
